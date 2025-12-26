@@ -14,9 +14,21 @@ public class Planner {
 
     private final Map<Integer, PlannerBacktrack> cameFrom;
 
+    // Statistics for performance testing
+    private int lastIterationCount = 0;
+    private int lastPositionsExplored = 0;
+
     public Planner(List<ActionValuePoint> actionValuePointList) {
         this.actionValuePointList = actionValuePointList;
         cameFrom = new HashMap<>();
+    }
+
+    public int getLastIterationCount() {
+        return lastIterationCount;
+    }
+
+    public int getLastPositionsExplored() {
+        return lastPositionsExplored;
     }
 
     public List<ActionValuePoint> plan(int target) {
@@ -28,9 +40,24 @@ public class Planner {
         Map<Integer, PlannerNode> openSet = new HashMap<>();
         openSet.put(0, new PlannerNode(null, 0, 0));
 
+        // Prevent infinite loops: if we've explored too many positions, target is likely unreachable
+        // Calculate reasonable limit based on target and available actions
+        // The closed set prevents revisiting, so this is bounded by unique reachable positions
+        int maxIterations = Math.max(10000, Math.abs(target) * 100);
+        int iterations = 0;
+
         while (!openSet.isEmpty()) {
+            if (++iterations > maxIterations) {
+                System.err.println("Planner exceeded max iterations - target likely unreachable");
+                lastIterationCount = iterations;
+                lastPositionsExplored = closedSet.size();
+                return null;
+            }
+
             int x = getSmallestF(openSet);
             if (x == target) {
+                lastIterationCount = iterations;
+                lastPositionsExplored = closedSet.size();
                 return reconstructPath(target);
             }
             PlannerNode xData = openSet.remove(x);
@@ -52,6 +79,8 @@ public class Planner {
             }
         }
         System.err.println("Planner could not find solution");
+        lastIterationCount = iterations;
+        lastPositionsExplored = closedSet.size();
         return null;
     }
 
