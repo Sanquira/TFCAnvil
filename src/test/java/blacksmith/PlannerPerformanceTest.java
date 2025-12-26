@@ -50,7 +50,7 @@ public class PlannerPerformanceTest {
                 Arguments.of(50, 1000, 200, 5, 10),
                 Arguments.of(100, 1000, 400, 5, 10),
                 Arguments.of(200, 1600, 800, 10, 20),
-                Arguments.of(2000, 16000, 2000, 10, 130));
+                Arguments.of(2000, 16000, 2000, 15, 130));
     }
 
     @ParameterizedTest(name = "Target {0}: should complete in < {1} iterations")
