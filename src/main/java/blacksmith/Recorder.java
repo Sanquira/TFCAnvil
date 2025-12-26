@@ -45,64 +45,48 @@ public class Recorder implements ToggableListeners {
     @Override
     public void enableListeners() {
         if (keyListener == null) {
-            keyListener = new KeyEventListener() {
-                @Override
-                public int getKey() {
-                    return 65; // F7
-                }
-
-                @Override
-                public void keyPressed() {
-                    if (isRecording()) {
-                        StopRecording();
-                    } else {
-                        StartRecording();
-                    }
+            keyListener = () -> {
+                if (isRecording()) {
+                    StopRecording();
+                } else {
+                    StartRecording();
                 }
             };
         }
         if (mouseListener == null) {
-            mouseListener = new MouseEventListener() {
-                @Override
-                public int getButton() {
-                    return 1;
+            mouseListener = event -> {
+                if (!isRecording()) {
+                    return;
                 }
 
-                @Override
-                public void mouseClicked(MouseEvent event) {
-                    if (!isRecording()) {
-                        return;
-                    }
-
-                    if (currentAction != null) {
-                        actionValuePointMap.put(
-                                currentAction.name, new ActionValuePoint(currentAction, event.getX(), event.getY()));
-                        SelectNextAction();
-                        return;
-                    }
-                    if (leftTop == null) {
-                        leftTop = new Point(event.getX(), event.getY());
-                        SelectNextAction();
-                        return;
-                    }
-                    if (rightBottom == null) {
-                        rightBottom = new Point(event.getX(), event.getY());
-                        SelectNextAction();
-                        return;
-                    }
-                    System.err.println("Still recording despite all data is filled.");
+                if (currentAction != null) {
+                    actionValuePointMap.put(
+                            currentAction.name, new ActionValuePoint(currentAction, event.getX(), event.getY()));
                     SelectNextAction();
+                    return;
                 }
+                if (leftTop == null) {
+                    leftTop = new Point(event.getX(), event.getY());
+                    SelectNextAction();
+                    return;
+                }
+                if (rightBottom == null) {
+                    rightBottom = new Point(event.getX(), event.getY());
+                    SelectNextAction();
+                    return;
+                }
+                System.err.println("Still recording despite all data is filled.");
+                SelectNextAction();
             };
         }
-        nativeListener.addKeyPressedListener(keyListener);
-        nativeListener.addMouseClickedListener(mouseListener);
+        nativeListener.addKeyPressedListener(65, keyListener); // F7
+        nativeListener.addMouseClickedListener(1, mouseListener); // Button 1 (left click)
     }
 
     @Override
     public void disableListeners() {
-        nativeListener.removeKeyPressedListener(keyListener);
-        nativeListener.removeMouseClickedListener(mouseListener);
+        nativeListener.removeKeyPressedListener(65, keyListener); // F7
+        nativeListener.removeMouseClickedListener(1, mouseListener); // Button 1 (left click)
     }
 
     public boolean isRecording() {

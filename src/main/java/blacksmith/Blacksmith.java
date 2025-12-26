@@ -109,23 +109,15 @@ public class Blacksmith implements ToggableListeners {
     @Override
     public void enableListeners() {
         if (keyListener == null) {
-            keyListener = new KeyEventListener() {
-                @Override
-                public int getKey() {
-                    return 66; // F8
-                }
-
-                @Override
-                public void keyPressed() {
-                    if (IsReady()) {
-                        StartTransaction();
-                    } else {
-                        System.err.println("Blacksmith is not ready.");
-                    }
+            keyListener = () -> {
+                if (IsReady()) {
+                    StartTransaction();
+                } else {
+                    System.err.println("Blacksmith is not ready.");
                 }
             };
         }
-        nativeListener.addKeyPressedListener(keyListener);
+        nativeListener.addKeyPressedListener(66, keyListener); // F8
     }
 
     @Override
@@ -133,7 +125,7 @@ public class Blacksmith implements ToggableListeners {
         if (keyListener == null) {
             return;
         }
-        nativeListener.removeKeyPressedListener(keyListener);
+        nativeListener.removeKeyPressedListener(66, keyListener); // F8
     }
 
     private boolean CreateRecipe(List<ActionValuePoint> plan) {
