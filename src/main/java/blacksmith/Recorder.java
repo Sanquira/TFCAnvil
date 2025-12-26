@@ -11,27 +11,24 @@ import listeners.KeyEventListener;
 import listeners.MouseEventListener;
 import listeners.ToggableListeners;
 import listeners.events.MouseEvent;
-import wrappers.ActionValue;
 import wrappers.ActionValuePoint;
 
 public class Recorder implements ToggableListeners {
 
     private final MainGUIInterface gui;
     private final NativeListener nativeListener;
-    private final Map<String, ActionValue> actionValueMap;
     private final Map<String, ActionValuePoint> actionValuePointMap;
     private boolean isRecording = false;
     private KeyEventListener keyListener = null;
     private MouseEventListener mouseListener = null;
-    private Iterator<Map.Entry<String, ActionValue>> actionIterator;
-    private ActionValue currentActionValue;
+    private Iterator<Actions> actionIterator;
+    private Actions currentAction;
 
     private Point leftTop, rightBottom;
 
-    public Recorder(MainGUIInterface gui, NativeListener nativeListener, Map<String, ActionValue> actionValueMap) {
+    public Recorder(MainGUIInterface gui, NativeListener nativeListener) {
         this.gui = gui;
         this.nativeListener = nativeListener;
-        this.actionValueMap = actionValueMap;
         this.actionValuePointMap = new HashMap<>();
         StopRecording();
 
@@ -76,10 +73,9 @@ public class Recorder implements ToggableListeners {
                         return;
                     }
 
-                    if (currentActionValue != null) {
+                    if (currentAction != null) {
                         actionValuePointMap.put(
-                                currentActionValue.name(),
-                                new ActionValuePoint(currentActionValue, event.getX(), event.getY()));
+                                currentAction.name, new ActionValuePoint(currentAction, event.getX(), event.getY()));
                         SelectNextAction();
                         return;
                     }
@@ -124,7 +120,7 @@ public class Recorder implements ToggableListeners {
         this.isRecording = false;
         gui.setStatusLabel(StatusLabel.NOT_RECORDING);
         gui.setGuideLabel(GuideLabel.createRecordGuide());
-        if (currentActionValue == null && leftTop != null && rightBottom != null) {
+        if (currentAction == null && leftTop != null && rightBottom != null) {
             StateMachine.getInstance().setCurrentState(ProgramState.RECORDED);
             gui.setStatusLabel(StatusLabel.RECORDED);
             gui.setGuideLabel(GuideLabel.createBlacksmithReadyLabel());
@@ -136,15 +132,14 @@ public class Recorder implements ToggableListeners {
 
     private void SelectNextAction() {
         if (actionIterator == null) {
-            actionIterator = this.actionValueMap.entrySet().iterator();
+            actionIterator = java.util.Arrays.asList(Actions.values()).iterator();
         }
         if (actionIterator.hasNext()) {
-            Map.Entry<String, ActionValue> actionValueEntry = actionIterator.next();
-            currentActionValue = actionValueEntry.getValue();
-            gui.setGuideLabel(GuideLabel.createActionRecordingLabel(actionValueEntry.getKey()));
+            currentAction = actionIterator.next();
+            gui.setGuideLabel(GuideLabel.createActionRecordingLabel(currentAction.name));
             return;
         }
-        currentActionValue = null;
+        currentAction = null;
         if (leftTop == null) {
             gui.setGuideLabel(GuideLabel.createLeftTopPositionRecordingLabel());
             return;
@@ -161,7 +156,7 @@ public class Recorder implements ToggableListeners {
         actionValuePointMap.clear();
         leftTop = null;
         rightBottom = null;
-        currentActionValue = null;
+        currentAction = null;
     }
 
     public Map<String, ActionValuePoint> getActionValuePointMap() {

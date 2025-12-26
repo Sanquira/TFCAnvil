@@ -37,11 +37,11 @@ public class Planner {
             closedSet.put(x, xData);
 
             for (ActionValuePoint action : actionValuePointList) {
-                int n = x + action.actionValue().value();
+                int n = x + action.action().value;
                 if (closedSet.containsKey(n)) {
                     continue;
                 }
-                int currGScore = xData.gValue() + action.actionValue().value();
+                int currGScore = xData.gValue() + action.action().value;
                 if (currGScore < 0) {
                     continue;
                 }

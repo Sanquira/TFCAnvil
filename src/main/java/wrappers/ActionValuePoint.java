@@ -1,9 +1,11 @@
 package wrappers;
 
-public record ActionValuePoint(ActionValue actionValue, int posX, int posY) {
+import blacksmith.Actions;
+
+public record ActionValuePoint(Actions action, int posX, int posY) {
 
     @Override
     public String toString() {
-        return "ActionValuePoint{" + "actionValue=" + actionValue + ", posX=" + posX + ", posY=" + posY + '}';
+        return "ActionValuePoint{" + "action=" + action + ", posX=" + posX + ", posY=" + posY + '}';
     }
 }

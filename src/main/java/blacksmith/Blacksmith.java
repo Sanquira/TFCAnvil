@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.*;
 import listeners.KeyEventListener;
 import listeners.ToggableListeners;
-import wrappers.ActionValue;
 import wrappers.ActionValuePoint;
 import wrappers.Recipe;
 
@@ -89,8 +88,8 @@ public class Blacksmith implements ToggableListeners {
                 return;
             }
             List<ActionValuePoint> plan = planner.plan(targetDist);
-            for (ActionValue action : requestedRecipe.finishingActions()) {
-                plan.add(actionValuePointMap.get(action.name()));
+            for (Actions action : requestedRecipe.finishingActions()) {
+                plan.add(actionValuePointMap.get(action.name));
             }
 
             boolean successful = CreateRecipe(plan);

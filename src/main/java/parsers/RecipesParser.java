@@ -1,5 +1,6 @@
 package parsers;
 
+import blacksmith.Actions;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
@@ -13,17 +14,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import wrappers.ActionValue;
 import wrappers.Recipe;
 
 public class RecipesParser extends AbstractParser<List<Recipe>> {
-    Map<String, ActionValue> actionValuesMap;
-
-    public RecipesParser(String filePath, Map<String, ActionValue> actionValues) {
+    public RecipesParser(String filePath) {
         super(filePath);
-        this.actionValuesMap = actionValues;
         this.g = new GsonBuilder()
-                .registerTypeAdapter(Recipe.class, new RecipeDeserializer(actionValues))
+                .registerTypeAdapter(Recipe.class, new RecipeDeserializer())
                 .create();
     }
 
@@ -43,22 +40,22 @@ public class RecipesParser extends AbstractParser<List<Recipe>> {
     }
 
     static class RecipeDeserializer implements JsonDeserializer<Recipe> {
-        private final Map<String, ActionValue> actionMap;
-
-        RecipeDeserializer(Map<String, ActionValue> actionMap) {
-            this.actionMap = actionMap;
-        }
-
         @Override
         public Recipe deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
                 throws JsonParseException {
             JsonObject obj = json.getAsJsonObject();
             String name = obj.get("name").getAsString();
             JsonArray arr = obj.getAsJsonArray("finishingActions");
-            List<ActionValue> actions = new ArrayList<>(arr.size());
+            List<Actions> actions = new ArrayList<>(arr.size());
             for (JsonElement element : arr) {
                 String actName = element.getAsString();
-                ActionValue value = actionMap.get(actName);
+                Actions value = null;
+                for (Actions a : Actions.values()) {
+                    if (a.name.equals(actName)) {
+                        value = a;
+                        break;
+                    }
+                }
                 if (value == null) {
                     throw new JsonParseException("Unknown finishing action in recipe. (" + name + ")");
                 }
