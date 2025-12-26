@@ -23,17 +23,17 @@ public class RecipesParser extends AbstractParser<List<RecipeRaw>> {
         List<RecipeRaw> recipesRaw = super.parse();
         Map<String, Recipe> recipes = new HashMap<>();
         for (RecipeRaw recipeRaw : recipesRaw) {
-            String[] finishingActions = recipeRaw.getFinishingActions();
+            String[] finishingActions = recipeRaw.finishingActions();
             List<ActionValue> actionValueList = new ArrayList<>(finishingActions.length);
             for (String actionValue : finishingActions) {
                 ActionValue action = actionValuesMap.get(actionValue);
                 if (action == null) {
-                    System.err.println("Unknown finishing action in recipe. (" + recipeRaw.getName() + ")");
+                    System.err.println("Unknown finishing action in recipe. (" + recipeRaw.name() + ")");
                     return null;
                 }
                 actionValueList.add(actionValuesMap.get(actionValue));
             }
-            recipes.put(recipeRaw.getName(), new Recipe(recipeRaw.getName(), actionValueList));
+            recipes.put(recipeRaw.name(), new Recipe(recipeRaw.name(), actionValueList));
         }
         return recipes;
     }
