@@ -11,7 +11,6 @@ import java.util.Map;
 import listeners.KeyEventListener;
 import listeners.MouseEventListener;
 import listeners.ToggableListeners;
-import listeners.events.MouseEvent;
 import wrappers.ActionValuePoint;
 
 public class Recorder implements ToggableListeners {

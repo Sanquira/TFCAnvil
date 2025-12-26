@@ -1,17 +1,10 @@
 import blacksmith.*;
 import gui.MainGUI;
-import java.util.Map;
-import parsers.RecipesParser;
-import wrappers.Recipe;
 
 public class BlacksmithMain {
     public static void main(String[] args) {
-        RecipesParser recipesParser = new RecipesParser("recipes.json");
-        Map<String, Recipe> recipeMap = recipesParser.parseToMap();
-
         NativeListener nativeListener = new NativeListener();
-
-        MainGUI gui = new MainGUI(recipeMap);
+        MainGUI gui = new MainGUI("recipes.json");
 
         Recorder recorder = new Recorder(gui, nativeListener);
         recorder.enableListeners();
