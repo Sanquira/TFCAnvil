@@ -2,9 +2,8 @@ package Demos;
 
 import Demos.mocks.RobotMock;
 import blacksmith.Scanner;
-
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
 public class ScannerTest {
     static JFrame frame = new JFrame();
@@ -12,7 +11,8 @@ public class ScannerTest {
     public static void main(String[] args) {
         Robot robot = null;
         try {
-            robot = new RobotMock(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice());
+            robot = new RobotMock(
+                    GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice());
         } catch (AWTException e) {
             e.printStackTrace();
         }

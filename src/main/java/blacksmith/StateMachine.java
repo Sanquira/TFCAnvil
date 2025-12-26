@@ -1,8 +1,7 @@
 package blacksmith;
 
-import listeners.ProgramStateListener;
-
 import java.util.HashSet;
+import listeners.ProgramStateListener;
 
 public class StateMachine {
 

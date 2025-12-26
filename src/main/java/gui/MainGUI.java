@@ -2,13 +2,12 @@ package gui;
 
 import blacksmith.ProgramState;
 import blacksmith.StateMachine;
-import listeners.RecipeChangedEventListener;
-import wrappers.Recipe;
-
-import javax.swing.*;
 import java.awt.*;
 import java.util.HashSet;
 import java.util.Map;
+import javax.swing.*;
+import listeners.RecipeChangedEventListener;
+import wrappers.Recipe;
 
 public class MainGUI extends JFrame implements MainGUIInterface {
 
@@ -25,7 +24,8 @@ public class MainGUI extends JFrame implements MainGUIInterface {
         setAlwaysOnTop(true);
         setLayout(new BorderLayout());
         JComboBox<String> recipeListComboBox = new JComboBox<>();
-        recipeListComboBox.setEnabled(StateMachine.getInstance().getCurrentState().isRecipesEnabled());
+        recipeListComboBox.setEnabled(
+                StateMachine.getInstance().getCurrentState().isRecipesEnabled());
         for (String recipeName : recipeMap.keySet()) {
             recipeListComboBox.addItem(recipeName);
         }

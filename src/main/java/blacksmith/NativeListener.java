@@ -6,19 +6,17 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
 import com.github.kwhat.jnativehook.mouse.NativeMouseInputListener;
-import listeners.KeyEventListener;
-import listeners.MouseEventListener;
-import listeners.events.MouseEvent;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import listeners.KeyEventListener;
+import listeners.MouseEventListener;
+import listeners.events.MouseEvent;
 
 public class NativeListener implements NativeKeyListener, NativeMouseInputListener {
 
     Map<Integer, HashSet<KeyEventListener>> nativeKeyPressed;
     Map<Integer, HashSet<MouseEventListener>> nativeMouseClicked;
-
 
     public NativeListener() {
         this.nativeKeyPressed = new HashMap<>();
@@ -83,22 +81,13 @@ public class NativeListener implements NativeKeyListener, NativeMouseInputListen
         }
     }
 
+    public void nativeKeyReleased(NativeKeyEvent e) {}
 
-    public void nativeKeyReleased(NativeKeyEvent e) {
-    }
+    public void nativeKeyTyped(NativeKeyEvent e) {}
 
+    public void nativeMouseDragged(NativeMouseEvent e) {}
 
-    public void nativeKeyTyped(NativeKeyEvent e) {
-    }
-
-
-    public void nativeMouseDragged(NativeMouseEvent e) {
-    }
-
-
-    public void nativeMouseMoved(NativeMouseEvent e) {
-    }
-
+    public void nativeMouseMoved(NativeMouseEvent e) {}
 
     public void nativeMouseClicked(NativeMouseEvent e) {
         int key = e.getButton();
@@ -110,12 +99,7 @@ public class NativeListener implements NativeKeyListener, NativeMouseInputListen
         }
     }
 
+    public void nativeMousePressed(NativeMouseEvent e) {}
 
-    public void nativeMousePressed(NativeMouseEvent e) {
-    }
-
-
-    public void nativeMouseReleased(NativeMouseEvent e) {
-    }
-
+    public void nativeMouseReleased(NativeMouseEvent e) {}
 }

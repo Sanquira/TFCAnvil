@@ -1,15 +1,16 @@
 package wrappers;
 
-import java.util.Objects;
-
 public record PlannerBacktrack(ActionValuePoint actionValuePoint, int cameFrom) {
-    public ActionValuePoint actionValuePoint() { return actionValuePoint; }
-    public int cameFrom() { return cameFrom; }
+    public ActionValuePoint actionValuePoint() {
+        return actionValuePoint;
+    }
+
+    public int cameFrom() {
+        return cameFrom;
+    }
 
     @Override
     public String toString() {
-        return "PlannerBacktrack[" +
-                "actionValuePoint=" + actionValuePoint + ", " +
-                "cameFrom=" + cameFrom + ']';
+        return "PlannerBacktrack[" + "actionValuePoint=" + actionValuePoint + ", " + "cameFrom=" + cameFrom + ']';
     }
 }

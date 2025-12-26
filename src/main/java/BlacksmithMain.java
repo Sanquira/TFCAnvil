@@ -1,11 +1,10 @@
 import blacksmith.*;
 import gui.MainGUI;
+import java.util.Map;
 import parsers.ActionParser;
 import parsers.RecipesParser;
 import wrappers.ActionValue;
 import wrappers.Recipe;
-
-import java.util.Map;
 
 public class BlacksmithMain {
     public static void main(String[] args) {
@@ -21,7 +20,6 @@ public class BlacksmithMain {
 
         Recorder recorder = new Recorder(gui, nativeListener, actionValueMap);
         recorder.enableListeners();
-
 
         Blacksmith blacksmith = new Blacksmith(gui, nativeListener);
         StateMachine.getInstance().addProgramStateListener(newState -> {

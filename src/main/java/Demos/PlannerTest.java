@@ -1,12 +1,11 @@
 package Demos;
 
 import blacksmith.Planner;
+import java.util.ArrayList;
+import java.util.List;
 import parsers.ActionParser;
 import wrappers.ActionValue;
 import wrappers.ActionValuePoint;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class PlannerTest {
 

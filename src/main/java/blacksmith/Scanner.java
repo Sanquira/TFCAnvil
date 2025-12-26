@@ -66,4 +66,3 @@ public class Scanner {
         return -1;
     }
 }
-

@@ -3,10 +3,9 @@ package Demos;
 import Demos.mocks.GUIMock;
 import blacksmith.NativeListener;
 import blacksmith.Recorder;
+import java.util.Map;
 import parsers.ActionParser;
 import wrappers.ActionValue;
-
-import java.util.Map;
 
 public class RecorderTest {
     public static void main(String[] args) {

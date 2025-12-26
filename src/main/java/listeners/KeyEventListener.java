@@ -7,5 +7,4 @@ public interface KeyEventListener extends EventListener {
     int getKey();
 
     void keyPressed();
-
 }

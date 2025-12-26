@@ -1,11 +1,10 @@
 package Demos;
 
+import java.util.Map;
 import parsers.ActionParser;
 import parsers.RecipesParser;
 import wrappers.ActionValue;
 import wrappers.Recipe;
-
-import java.util.Map;
 
 public class RecipeParserTest {
     public static void main(String[] args) {

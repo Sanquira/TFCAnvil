@@ -3,17 +3,16 @@ package blacksmith;
 import gui.GuideLabel;
 import gui.MainGUIInterface;
 import gui.StatusLabel;
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import listeners.KeyEventListener;
 import listeners.MouseEventListener;
 import listeners.ToggableListeners;
 import listeners.events.MouseEvent;
 import wrappers.ActionValue;
 import wrappers.ActionValuePoint;
-
-import java.awt.*;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 public class Recorder implements ToggableListeners {
 
@@ -51,7 +50,7 @@ public class Recorder implements ToggableListeners {
             keyListener = new KeyEventListener() {
                 @Override
                 public int getKey() {
-                    return 65; //F7
+                    return 65; // F7
                 }
 
                 @Override
@@ -78,7 +77,8 @@ public class Recorder implements ToggableListeners {
                     }
 
                     if (currentActionValue != null) {
-                        actionValuePointMap.put(currentActionValue.name(),
+                        actionValuePointMap.put(
+                                currentActionValue.name(),
                                 new ActionValuePoint(currentActionValue, event.getX(), event.getY()));
                         SelectNextAction();
                         return;
@@ -140,9 +140,9 @@ public class Recorder implements ToggableListeners {
         }
         if (actionIterator.hasNext()) {
             Map.Entry<String, ActionValue> actionValueEntry = actionIterator.next();
-             currentActionValue = actionValueEntry.getValue();
-             gui.setGuideLabel(GuideLabel.createActionRecordingLabel(actionValueEntry.getKey()));
-             return;
+            currentActionValue = actionValueEntry.getValue();
+            gui.setGuideLabel(GuideLabel.createActionRecordingLabel(actionValueEntry.getKey()));
+            return;
         }
         currentActionValue = null;
         if (leftTop == null) {

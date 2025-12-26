@@ -17,10 +17,14 @@ public record Recipe(String name, List<ActionValue> finishingActions, int startV
 
     @Override
     public String toString() {
-        return "Recipe{" +
-                "name='" + name + '\'' +
-                ", finishingActions=" + finishingActions +
-                ", startValue=" + startValue +
-                '}';
+        return "Recipe{"
+                + "name='"
+                + name
+                + '\''
+                + ", finishingActions="
+                + finishingActions
+                + ", startValue="
+                + startValue
+                + '}';
     }
 }

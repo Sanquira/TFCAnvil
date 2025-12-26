@@ -1,16 +1,14 @@
 package parsers;
 
 import com.google.gson.reflect.TypeToken;
-import wrappers.ActionValue;
-
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import wrappers.ActionValue;
 
 public class ActionParser extends AbstractParser<List<ActionValue>> {
-    private static final Type CONFIG_TYPE = new TypeToken<List<ActionValue>>() {
-    }.getType();
+    private static final Type CONFIG_TYPE = new TypeToken<List<ActionValue>>() {}.getType();
 
     public ActionParser(String filePath) {
         super(filePath);

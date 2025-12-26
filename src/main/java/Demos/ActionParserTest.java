@@ -1,9 +1,8 @@
 package Demos;
 
+import java.util.Map;
 import parsers.ActionParser;
 import wrappers.ActionValue;
-
-import java.util.Map;
 
 public class ActionParserTest {
 

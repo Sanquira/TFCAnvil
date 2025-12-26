@@ -1,8 +1,6 @@
 package listeners.events;
 
-
 import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
-
 import java.util.EventObject;
 
 public class MouseEvent extends EventObject {

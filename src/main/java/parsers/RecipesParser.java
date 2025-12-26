@@ -1,6 +1,5 @@
 package parsers;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
@@ -9,14 +8,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
-import wrappers.ActionValue;
-import wrappers.Recipe;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import wrappers.ActionValue;
+import wrappers.Recipe;
 
 public class RecipesParser extends AbstractParser<List<Recipe>> {
     Map<String, ActionValue> actionValuesMap;
@@ -41,8 +39,7 @@ public class RecipesParser extends AbstractParser<List<Recipe>> {
 
     @Override
     protected Type getObjectType() {
-        return new TypeToken<List<Recipe>>() {
-        }.getType();
+        return new TypeToken<List<Recipe>>() {}.getType();
     }
 
     static class RecipeDeserializer implements JsonDeserializer<Recipe> {
@@ -53,7 +50,8 @@ public class RecipesParser extends AbstractParser<List<Recipe>> {
         }
 
         @Override
-        public Recipe deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        public Recipe deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                throws JsonParseException {
             JsonObject obj = json.getAsJsonObject();
             String name = obj.get("name").getAsString();
             JsonArray arr = obj.getAsJsonArray("finishingActions");

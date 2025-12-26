@@ -3,23 +3,19 @@ package blacksmith;
 import gui.GuideLabel;
 import gui.MainGUIInterface;
 import gui.StatusLabel;
+import java.awt.*;
+import java.awt.event.InputEvent;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import javax.swing.*;
 import listeners.KeyEventListener;
 import listeners.ToggableListeners;
 import wrappers.ActionValue;
 import wrappers.ActionValuePoint;
 import wrappers.Recipe;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.InputEvent;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-
 
 public class Blacksmith implements ToggableListeners {
     private final MainGUIInterface gui;
@@ -35,7 +31,6 @@ public class Blacksmith implements ToggableListeners {
     private ActionValuePoint activeValuePoint;
     private CountDownLatch operationLatch;
     private int lastGreenPos = -1;
-
 
     public Blacksmith(MainGUIInterface gui, NativeListener nativeListener) {
         this.gui = gui;
@@ -118,7 +113,7 @@ public class Blacksmith implements ToggableListeners {
             keyListener = new KeyEventListener() {
                 @Override
                 public int getKey() {
-                    return 66; //F8
+                    return 66; // F8
                 }
 
                 @Override
@@ -168,7 +163,7 @@ public class Blacksmith implements ToggableListeners {
         robot.mouseMove(point.posX(), point.posY());
 
         int currGreenPos = scanner.ScanGreenPosition();
-        System.out.println(lastGreenPos+", "+currGreenPos);
+        System.out.println(lastGreenPos + ", " + currGreenPos);
         if (lastGreenPos != -1 && lastGreenPos != currGreenPos) {
             repeatClickTimer.stop();
             lastGreenPos = currGreenPos;

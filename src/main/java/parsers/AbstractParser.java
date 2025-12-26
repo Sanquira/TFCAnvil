@@ -2,13 +2,12 @@ package parsers;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.lang.reflect.Type;
 
-abstract public class AbstractParser<T> {
+public abstract class AbstractParser<T> {
 
     Gson g;
     String filePath;
@@ -44,7 +43,7 @@ abstract public class AbstractParser<T> {
         return null;
     }
 
-    abstract protected Type getObjectType();
+    protected abstract Type getObjectType();
 
     public T parse() {
         File file = openFile(filePath);
