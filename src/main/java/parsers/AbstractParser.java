@@ -55,6 +55,15 @@ abstract public class AbstractParser<T> {
         if (jsonReader == null) {
             return null;
         }
-        return g.fromJson(jsonReader, getObjectType());
+        try {
+            return g.fromJson(jsonReader, getObjectType());
+        } catch (com.google.gson.JsonParseException e) {
+            // Print the parser-provided message (e.g. Unknown finishing action...) and return null
+            System.err.println(e.getMessage());
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
