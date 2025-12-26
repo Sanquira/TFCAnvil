@@ -4,6 +4,7 @@ import gui.GuideLabel;
 import gui.MainGUIInterface;
 import gui.StatusLabel;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -132,7 +133,7 @@ public class Recorder implements ToggableListeners {
 
     private void SelectNextAction() {
         if (actionIterator == null) {
-            actionIterator = java.util.Arrays.asList(Actions.values()).iterator();
+            actionIterator = Arrays.asList(Actions.values()).iterator();
         }
         if (actionIterator.hasNext()) {
             currentAction = actionIterator.next();
