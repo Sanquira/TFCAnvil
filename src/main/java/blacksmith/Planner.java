@@ -38,11 +38,11 @@ public class Planner {
             closedSet.put(x, xData);
 
             for (ActionValuePoint action : actionValuePointList) {
-                int n = x + action.actionValue().getValue();
+                int n = x + action.actionValue().value();
                 if (closedSet.containsKey(n)) {
                     continue;
                 }
-                int currGScore = xData.gValue() + action.actionValue().getValue();
+                int currGScore = xData.gValue() + action.actionValue().value();
                 if (currGScore < 0) {
                     continue;
                 }

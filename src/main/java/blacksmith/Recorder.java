@@ -78,7 +78,7 @@ public class Recorder implements ToggableListeners {
                     }
 
                     if (currentActionValue != null) {
-                        actionValuePointMap.put(currentActionValue.getName(),
+                        actionValuePointMap.put(currentActionValue.name(),
                                 new ActionValuePoint(currentActionValue, event.getX(), event.getY()));
                         SelectNextAction();
                         return;
@@ -140,9 +140,9 @@ public class Recorder implements ToggableListeners {
         }
         if (actionIterator.hasNext()) {
             Map.Entry<String, ActionValue> actionValueEntry = actionIterator.next();
-            currentActionValue = actionValueEntry.getValue();
-            gui.setGuideLabel(GuideLabel.createActionRecordingLabel(actionValueEntry.getKey()));
-            return;
+             currentActionValue = actionValueEntry.getValue();
+             gui.setGuideLabel(GuideLabel.createActionRecordingLabel(actionValueEntry.getKey()));
+             return;
         }
         currentActionValue = null;
         if (leftTop == null) {

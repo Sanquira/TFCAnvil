@@ -89,13 +89,13 @@ public class Blacksmith implements ToggableListeners {
             if (distance == 0) {
                 return;
             }
-            int targetDist = distance + requestedRecipe.getStartValue();
+            int targetDist = distance + requestedRecipe.startValue();
             if (targetDist < 0) {
                 return;
             }
             List<ActionValuePoint> plan = planner.plan(targetDist);
-            for (ActionValue action : requestedRecipe.getFinishingActions()) {
-                plan.add(actionValuePointMap.get(action.getName()));
+            for (ActionValue action : requestedRecipe.finishingActions()) {
+                plan.add(actionValuePointMap.get(action.name()));
             }
 
             boolean successful = CreateRecipe(plan);

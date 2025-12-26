@@ -1,32 +1,15 @@
 package wrappers;
 
-public class ActionValue {
-    private final int value;
-    private final String name;
-
-    public ActionValue(String name, int value) {
-        this.name = name;
-        this.value = value;
-    }
-
+public record ActionValue(String name, int value) {
     public ActionValue(ActionValue obj) {
-        this.name = obj.name;
-        this.value = obj.value;
-    }
-
-    public int getValue() {
-        return value;
-    }
-
-    public String getName() {
-        return name;
+        this(obj.name(), obj.value());
     }
 
     @Override
     public String toString() {
         return "ActionValue{" +
-                "actionValue=" + value +
-                ", name='" + name + '\'' +
+                "actionValue=" + value() +
+                ", name='" + name() + '\'' +
                 '}';
     }
 }

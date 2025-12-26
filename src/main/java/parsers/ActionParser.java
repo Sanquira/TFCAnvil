@@ -25,7 +25,7 @@ public class ActionParser extends AbstractParser<List<ActionValue>> {
         List<ActionValue> actionValues = super.parse();
         Map<String, ActionValue> actionValueMap = new HashMap<>();
         for (ActionValue action : actionValues) {
-            actionValueMap.put(action.getName(), action);
+            actionValueMap.put(action.name(), action);
         }
         return actionValueMap;
     }
