@@ -3,8 +3,7 @@ package parsers;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.InputStream;
 import java.lang.reflect.Type;
 
 public abstract class AbstractParser<T> {
@@ -17,43 +16,38 @@ public abstract class AbstractParser<T> {
         this.g = new Gson();
     }
 
-    protected File openFile(String fileName) {
-        File file = new File(fileName);
-        if (!file.exists()) {
-            System.err.println("File does not exist: " + fileName);
-            return null;
-        }
-        if (!file.isFile()) {
-            System.err.println(fileName + " is not file!");
-            return null;
-        }
-        if (!file.canRead()) {
-            System.err.println("Cannot read file: " + fileName);
-            return null;
-        }
-        return file;
-    }
-
-    protected JsonReader readJson(File file) {
+    protected InputStream openInputStream(String fileName) {
         try {
-            return new JsonReader(new FileReader(file));
-        } catch (FileNotFoundException e) {
+            File file = new File(fileName);
+            if (file.exists() && file.isFile() && file.canRead()) {
+                return new java.io.FileInputStream(file);
+            }
+        } catch (Exception e) {
+            System.err.println("Error opening file: " + fileName);
             e.printStackTrace();
         }
+        System.err.println("recipes.json not found, using internal recipes.json: " + fileName);
+        // Fallback: try to load from resources (classpath)
+        InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(fileName);
+        if (resourceStream != null) {
+            return resourceStream;
+        }
+        System.err.println("File does not exist: " + fileName + " (also not found in resources)");
         return null;
+    }
+
+    protected JsonReader readJson(InputStream in) {
+        return new JsonReader(new java.io.InputStreamReader(in));
     }
 
     protected abstract Type getObjectType();
 
     public T parse() {
-        File file = openFile(filePath);
-        if (file == null) {
+        InputStream in = openInputStream(filePath);
+        if (in == null) {
             return null;
         }
-        JsonReader jsonReader = readJson(file);
-        if (jsonReader == null) {
-            return null;
-        }
+        JsonReader jsonReader = readJson(in);
         try {
             return g.fromJson(jsonReader, getObjectType());
         } catch (com.google.gson.JsonParseException e) {
