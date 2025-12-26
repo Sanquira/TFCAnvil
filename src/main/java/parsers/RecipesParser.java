@@ -24,16 +24,6 @@ public class RecipesParser extends AbstractParser<List<Recipe>> {
                 .create();
     }
 
-    public Map<String, Recipe> parseToMap() {
-        List<Recipe> recipesList = super.parse();
-        if (recipesList == null) return null;
-        Map<String, Recipe> recipes = new HashMap<>();
-        for (Recipe recipe : recipesList) {
-            recipes.put(recipe.name(), recipe);
-        }
-        return recipes;
-    }
-
     @Override
     protected Type getObjectType() {
         return new TypeToken<List<Recipe>>() {}.getType();

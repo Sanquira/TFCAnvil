@@ -5,6 +5,7 @@ import blacksmith.StateMachine;
 import java.awt.*;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -28,7 +29,7 @@ public class MainGUI extends JFrame implements MainGUIInterface {
         this.recipeMap = loadRecipes();
         recipeSelectionEventListener = new HashSet<>();
 
-        setTitle("TF - blacksmith");
+        setTitle("TFC - Blacksmith");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setAlwaysOnTop(true);
         setLayout(new BorderLayout());
@@ -158,12 +159,7 @@ public class MainGUI extends JFrame implements MainGUIInterface {
     private Map<String, Recipe> loadRecipes() {
         try {
             parsers.RecipesParser parser = new parsers.RecipesParser(recipeFileName);
-            Map<String, wrappers.Recipe> newRecipeMap = parser.parseToMap();
-            if (newRecipeMap != null) {
-                return newRecipeMap;
-            } else {
-                JOptionPane.showMessageDialog(this, "Failed to load recipes.json", "Error", JOptionPane.ERROR_MESSAGE);
-            }
+            return parser.parse().stream().collect(Collectors.toMap(Recipe::name, recipe -> recipe));
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(
                     this, "Error loading recipes.json: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
