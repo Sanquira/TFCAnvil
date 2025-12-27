@@ -11,6 +11,8 @@ public class Scanner {
 
     private final Robot robot;
     private Rectangle rectangle;
+    private int redRow = 0;
+    private int greenRow = 0;
 
     public Scanner(Robot robot, Rectangle rectangle) {
         this.robot = robot;
@@ -26,7 +28,7 @@ public class Scanner {
     public int ScanDistance() {
         BufferedImage progress = robot.createScreenCapture(rectangle);
 
-        int y = 0;
+        int y = redRow;
         int myRedPoint = -1;
         int myGreenPoint = -1;
         int redSize = 2;
@@ -36,8 +38,10 @@ public class Scanner {
                 Color tmpColor = new Color(progress.getRGB(x, y));
                 if (isColorClose(tmpColor, RED_ARROW_COLOR) && myRedPoint == -1) {
                     myRedPoint = x;
+                    redRow = y;
+                    y = greenRow == 0 ? y : greenRow;
                     for (int xr = x + 1; xr < progress.getWidth(); xr++) {
-                        if (!isColorClose(new Color(progress.getRGB(xr, y)), RED_ARROW_COLOR)) {
+                        if (!isColorClose(new Color(progress.getRGB(xr, redRow)), RED_ARROW_COLOR)) {
                             redSize = xr - x;
                             break;
                         }
@@ -45,6 +49,7 @@ public class Scanner {
                 }
                 if (isColorClose(tmpColor, GREEN_ARROW_COLOR) && myGreenPoint == -1) {
                     myGreenPoint = x;
+                    greenRow = y;
                 }
                 if (myRedPoint != -1 && myGreenPoint != -1) {
                     break label30;
@@ -61,7 +66,7 @@ public class Scanner {
     public int ScanGreenPosition() {
         BufferedImage progress = robot.createScreenCapture(rectangle);
 
-        for (int y = progress.getHeight() - 1; y >= 0; y--) {
+        for (int y = greenRow; y < progress.getHeight() - 1; y++) {
             for (int x = 0; x < progress.getWidth(); x++) {
                 Color tmpColor = new Color(progress.getRGB(x, y));
                 if (isColorClose(tmpColor, GREEN_ARROW_COLOR)) {
@@ -70,5 +75,13 @@ public class Scanner {
             }
         }
         return -1;
+    }
+
+    public int getRedRow() {
+        return redRow;
+    }
+
+    public int getGreenRow() {
+        return greenRow;
     }
 }

@@ -50,5 +50,7 @@ class ScannerTest {
         assertEquals(113, distance, "Expected distance based on image.png");
         int greenPos = scanner.ScanGreenPosition();
         assertEquals(43, greenPos, "Expected green position based on image.png");
+        assertEquals(26, scanner.getRedRow(), "Expected red row position to be cached.");
+        assertEquals(47, scanner.getGreenRow(), "Expected green row position to be cached.");
     }
 }
