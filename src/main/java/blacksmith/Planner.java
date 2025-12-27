@@ -15,20 +15,20 @@ public class Planner {
     private final Map<Integer, PathStep> paths;
 
     // Statistics for performance testing
-    private int lastIterationCount = 0;
-    private int lastPositionsExplored = 0;
+    private int iterationCount = 0;
+    private int positionsExplored = 0;
 
     public Planner(List<ActionValuePoint> actionValuePointList) {
         this.actionValuePointList = actionValuePointList;
         paths = new HashMap<>();
     }
 
-    public int getLastIterationCount() {
-        return lastIterationCount;
+    public int getIterationCount() {
+        return iterationCount;
     }
 
-    public int getLastPositionsExplored() {
-        return lastPositionsExplored;
+    public int getPositionsExplored() {
+        return positionsExplored;
     }
 
     public List<ActionValuePoint> plan(int target, int maxValue) {
@@ -37,8 +37,8 @@ public class Planner {
         }
 
         if (target == 0) {
-            lastIterationCount = 0;
-            lastPositionsExplored = 1;
+            iterationCount = 0;
+            positionsExplored = 1;
             return new ArrayList<>();
         }
 
@@ -51,7 +51,7 @@ public class Planner {
         currentLevel.add(0);
 
         int maxSteps = Math.max(100, Math.abs(target) / 2);
-        lastIterationCount = 0;
+        iterationCount = 0;
 
         for (int step = 0; step < maxSteps; step++) {
             if (currentLevel.isEmpty()) {
@@ -64,7 +64,7 @@ public class Planner {
                 int currentCumulative = visited.get(position);
 
                 for (ActionValuePoint action : actionValuePointList) {
-                    lastIterationCount++;
+                    iterationCount++;
 
                     int newPosition = position + action.action().value;
                     int newCumulative = currentCumulative + action.action().value;
@@ -78,7 +78,7 @@ public class Planner {
                         paths.put(newPosition, new PathStep(action, position));
 
                         if (newPosition == target) {
-                            lastPositionsExplored = visited.size();
+                            positionsExplored = visited.size();
                             return reconstructPath(target);
                         }
 
@@ -91,12 +91,12 @@ public class Planner {
         }
 
         System.err.println("Planner could not find solution");
-        lastPositionsExplored = visited.size();
+        positionsExplored = visited.size();
         return null;
     }
 
     public List<ActionValuePoint> plan(int target) {
-        return this.plan(target, 100);
+        return this.plan(target, 150);
     }
 
     private List<ActionValuePoint> reconstructPath(int target) {

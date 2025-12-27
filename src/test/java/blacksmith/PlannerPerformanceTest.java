@@ -70,8 +70,8 @@ public class PlannerPerformanceTest {
         assertNotNull(result, "Should find solution for target " + target);
 
         // Verify performance metrics
-        int iterations = planner.getLastIterationCount();
-        int positionsExplored = planner.getLastPositionsExplored();
+        int iterations = planner.getIterationCount();
+        int positionsExplored = planner.getPositionsExplored();
 
         System.out.println(String.format(
                 "Target %d: %d iterations (limit: %d), %d positions (limit: %d), %dms (limit: %dms)",
@@ -107,7 +107,7 @@ public class PlannerPerformanceTest {
         List<ActionValuePoint> result = planner.plan(target, target);
         assertNotNull(result, "Should find solution for target " + target);
 
-        int iterations = planner.getLastIterationCount();
+        int iterations = planner.getIterationCount();
         // Old maxIterations=100 would fail for most of these
         assertTrue(
                 iterations <= 10000,
@@ -129,7 +129,7 @@ public class PlannerPerformanceTest {
 
         assertNotNull(result, "Should find solution for target 77");
 
-        int positionsExplored = planner.getLastPositionsExplored();
+        int positionsExplored = planner.getPositionsExplored();
 
         // SPFA should be reasonably efficient
         // Naive BFS might explore 300-500+ positions for target 77
