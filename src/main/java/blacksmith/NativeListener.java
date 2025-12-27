@@ -6,19 +6,17 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
 import com.github.kwhat.jnativehook.mouse.NativeMouseInputListener;
-import listeners.KeyEventListener;
-import listeners.MouseEventListener;
-import listeners.events.MouseEvent;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import listeners.KeyEventListener;
+import listeners.MouseEventListener;
+import listeners.events.MouseEvent;
 
 public class NativeListener implements NativeKeyListener, NativeMouseInputListener {
 
     Map<Integer, HashSet<KeyEventListener>> nativeKeyPressed;
     Map<Integer, HashSet<MouseEventListener>> nativeMouseClicked;
-
 
     public NativeListener() {
         this.nativeKeyPressed = new HashMap<>();
@@ -35,41 +33,37 @@ public class NativeListener implements NativeKeyListener, NativeMouseInputListen
         GlobalScreen.addNativeMouseListener(this);
     }
 
-    public void addKeyPressedListener(KeyEventListener listener) {
-        int key = listener.getKey();
-        if (!this.nativeKeyPressed.containsKey(key)) {
-            this.nativeKeyPressed.put(key, new HashSet<>());
+    public void addKeyPressedListener(int keyCode, KeyEventListener listener) {
+        if (!this.nativeKeyPressed.containsKey(keyCode)) {
+            this.nativeKeyPressed.put(keyCode, new HashSet<>());
         }
-        this.nativeKeyPressed.get(key).add(listener);
+        this.nativeKeyPressed.get(keyCode).add(listener);
     }
 
-    public void removeKeyPressedListener(KeyEventListener listener) {
-        int key = listener.getKey();
-        if (!this.nativeKeyPressed.containsKey(key)) {
+    public void removeKeyPressedListener(int keyCode, KeyEventListener listener) {
+        if (!this.nativeKeyPressed.containsKey(keyCode)) {
             return;
         }
-        this.nativeKeyPressed.get(key).remove(listener);
-        if (this.nativeKeyPressed.get(key).size() == 0) {
-            this.nativeKeyPressed.remove(key);
+        this.nativeKeyPressed.get(keyCode).remove(listener);
+        if (this.nativeKeyPressed.get(keyCode).isEmpty()) {
+            this.nativeKeyPressed.remove(keyCode);
         }
     }
 
-    public void addMouseClickedListener(MouseEventListener listener) {
-        int key = listener.getButton();
-        if (!this.nativeMouseClicked.containsKey(key)) {
-            this.nativeMouseClicked.put(key, new HashSet<>());
+    public void addMouseClickedListener(int button, MouseEventListener listener) {
+        if (!this.nativeMouseClicked.containsKey(button)) {
+            this.nativeMouseClicked.put(button, new HashSet<>());
         }
-        this.nativeMouseClicked.get(key).add(listener);
+        this.nativeMouseClicked.get(button).add(listener);
     }
 
-    public void removeMouseClickedListener(MouseEventListener listener) {
-        int key = listener.getButton();
-        if (!this.nativeMouseClicked.containsKey(key)) {
+    public void removeMouseClickedListener(int button, MouseEventListener listener) {
+        if (!this.nativeMouseClicked.containsKey(button)) {
             return;
         }
-        this.nativeMouseClicked.get(key).remove(listener);
-        if (this.nativeMouseClicked.get(key).size() == 0) {
-            this.nativeMouseClicked.remove(key);
+        this.nativeMouseClicked.get(button).remove(listener);
+        if (this.nativeMouseClicked.get(button).isEmpty()) {
+            this.nativeMouseClicked.remove(button);
         }
     }
 
@@ -83,22 +77,13 @@ public class NativeListener implements NativeKeyListener, NativeMouseInputListen
         }
     }
 
+    public void nativeKeyReleased(NativeKeyEvent e) {}
 
-    public void nativeKeyReleased(NativeKeyEvent e) {
-    }
+    public void nativeKeyTyped(NativeKeyEvent e) {}
 
+    public void nativeMouseDragged(NativeMouseEvent e) {}
 
-    public void nativeKeyTyped(NativeKeyEvent e) {
-    }
-
-
-    public void nativeMouseDragged(NativeMouseEvent e) {
-    }
-
-
-    public void nativeMouseMoved(NativeMouseEvent e) {
-    }
-
+    public void nativeMouseMoved(NativeMouseEvent e) {}
 
     public void nativeMouseClicked(NativeMouseEvent e) {
         int key = e.getButton();
@@ -110,12 +95,7 @@ public class NativeListener implements NativeKeyListener, NativeMouseInputListen
         }
     }
 
+    public void nativeMousePressed(NativeMouseEvent e) {}
 
-    public void nativeMousePressed(NativeMouseEvent e) {
-    }
-
-
-    public void nativeMouseReleased(NativeMouseEvent e) {
-    }
-
+    public void nativeMouseReleased(NativeMouseEvent e) {}
 }

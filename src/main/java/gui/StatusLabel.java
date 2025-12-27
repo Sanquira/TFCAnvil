@@ -8,7 +8,6 @@ public enum StatusLabel {
     BLACKSMITHING_ERROR("Error! Operation not successful!"),
     BLACKSMITHING_SUCCESS("Job's done!");
 
-
     private final String label;
 
     StatusLabel(String label) {

@@ -3,23 +3,18 @@ package blacksmith;
 import gui.GuideLabel;
 import gui.MainGUIInterface;
 import gui.StatusLabel;
-import listeners.KeyEventListener;
-import listeners.ToggableListeners;
-import wrappers.ActionValue;
-import wrappers.ActionValuePoint;
-import wrappers.Recipe;
-
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-
+import javax.swing.*;
+import listeners.KeyEventListener;
+import listeners.ToggableListeners;
+import wrappers.ActionValuePoint;
+import wrappers.Recipe;
 
 public class Blacksmith implements ToggableListeners {
     private final MainGUIInterface gui;
@@ -35,7 +30,6 @@ public class Blacksmith implements ToggableListeners {
     private ActionValuePoint activeValuePoint;
     private CountDownLatch operationLatch;
     private int lastGreenPos = -1;
-
 
     public Blacksmith(MainGUIInterface gui, NativeListener nativeListener) {
         this.gui = gui;
@@ -87,15 +81,27 @@ public class Blacksmith implements ToggableListeners {
 
             int distance = scanner.ScanDistance();
             if (distance == 0) {
+                gui.setStatusLabel(StatusLabel.BLACKSMITHING_SUCCESS);
+                StateMachine.getInstance().setCurrentState(ProgramState.RECORDED);
                 return;
             }
-            int targetDist = distance + requestedRecipe.getStartValue();
+            if (distance == -1) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Warning: Unable to detect distance. Please check the scanner area and try again.",
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE);
+                gui.setStatusLabel(StatusLabel.BLACKSMITHING_ERROR);
+                StateMachine.getInstance().setCurrentState(ProgramState.STARTED);
+                return;
+            }
+            int targetDist = distance + requestedRecipe.startValue();
             if (targetDist < 0) {
                 return;
             }
             List<ActionValuePoint> plan = planner.plan(targetDist);
-            for (ActionValue action : requestedRecipe.getFinishingActions()) {
-                plan.add(actionValuePointMap.get(action.getName()));
+            for (Actions action : requestedRecipe.finishingActions()) {
+                plan.add(actionValuePointMap.get(action.name));
             }
 
             boolean successful = CreateRecipe(plan);
@@ -115,23 +121,15 @@ public class Blacksmith implements ToggableListeners {
     @Override
     public void enableListeners() {
         if (keyListener == null) {
-            keyListener = new KeyEventListener() {
-                @Override
-                public int getKey() {
-                    return 66; //F8
-                }
-
-                @Override
-                public void keyPressed() {
-                    if (IsReady()) {
-                        StartTransaction();
-                    } else {
-                        System.err.println("Blacksmith is not ready.");
-                    }
+            keyListener = () -> {
+                if (IsReady()) {
+                    StartTransaction();
+                } else {
+                    System.err.println("Blacksmith is not ready.");
                 }
             };
         }
-        nativeListener.addKeyPressedListener(keyListener);
+        nativeListener.addKeyPressedListener(66, keyListener); // F8
     }
 
     @Override
@@ -139,7 +137,7 @@ public class Blacksmith implements ToggableListeners {
         if (keyListener == null) {
             return;
         }
-        nativeListener.removeKeyPressedListener(keyListener);
+        nativeListener.removeKeyPressedListener(66, keyListener); // F8
     }
 
     private boolean CreateRecipe(List<ActionValuePoint> plan) {
@@ -168,7 +166,7 @@ public class Blacksmith implements ToggableListeners {
         robot.mouseMove(point.posX(), point.posY());
 
         int currGreenPos = scanner.ScanGreenPosition();
-        System.out.println(lastGreenPos+", "+currGreenPos);
+        System.out.println(lastGreenPos + ", " + currGreenPos);
         if (lastGreenPos != -1 && lastGreenPos != currGreenPos) {
             repeatClickTimer.stop();
             lastGreenPos = currGreenPos;

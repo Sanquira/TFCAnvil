@@ -1,17 +1,14 @@
 package Demos;
 
-import parsers.ActionParser;
-import wrappers.ActionValue;
-
-import java.util.Map;
+import blacksmith.Actions;
 
 public class ActionParserTest {
 
     public static void main(String[] args) {
-        ActionParser actionParser = new ActionParser("action_config.json");
-        Map<String, ActionValue> actionValueMap = actionParser.parseToMap();
-        for (ActionValue action : actionValueMap.values()) {
-            System.out.println(action);
+        // Actions are now defined as an enum, not parsed from JSON
+        System.out.println("Available Actions:");
+        for (Actions action : Actions.values()) {
+            System.out.println(action.name + ": " + action.value);
         }
     }
 }

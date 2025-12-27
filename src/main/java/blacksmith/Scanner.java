@@ -7,6 +7,7 @@ public class Scanner {
 
     private static final Color RED_ARROW_COLOR = new Color(255, 0, 0);
     private static final Color GREEN_ARROW_COLOR = new Color(0, 255, 6);
+    private static final int COLOR_TOLERANCE = 25;
 
     private final Robot robot;
     private Rectangle rectangle;
@@ -14,6 +15,12 @@ public class Scanner {
     public Scanner(Robot robot, Rectangle rectangle) {
         this.robot = robot;
         this.rectangle = rectangle;
+    }
+
+    private boolean isColorClose(Color a, Color b) {
+        return Math.abs(a.getRed() - b.getRed()) <= Scanner.COLOR_TOLERANCE
+                && Math.abs(a.getGreen() - b.getGreen()) <= Scanner.COLOR_TOLERANCE
+                && Math.abs(a.getBlue() - b.getBlue()) <= Scanner.COLOR_TOLERANCE;
     }
 
     public int ScanDistance() {
@@ -27,16 +34,16 @@ public class Scanner {
         for (; y < progress.getHeight(); y++) {
             for (int x = 0; x < progress.getWidth(); x++) {
                 Color tmpColor = new Color(progress.getRGB(x, y));
-                if (tmpColor.equals(RED_ARROW_COLOR) && myRedPoint == -1) {
+                if (isColorClose(tmpColor, RED_ARROW_COLOR) && myRedPoint == -1) {
                     myRedPoint = x;
                     for (int xr = x + 1; xr < progress.getWidth(); xr++) {
-                        if (!(new Color(progress.getRGB(xr, y))).equals(RED_ARROW_COLOR)) {
+                        if (!isColorClose(new Color(progress.getRGB(xr, y)), RED_ARROW_COLOR)) {
                             redSize = xr - x;
                             break;
                         }
                     }
                 }
-                if (tmpColor.equals(GREEN_ARROW_COLOR) && myGreenPoint == -1) {
+                if (isColorClose(tmpColor, GREEN_ARROW_COLOR) && myGreenPoint == -1) {
                     myGreenPoint = x;
                 }
                 if (myRedPoint != -1 && myGreenPoint != -1) {
@@ -46,19 +53,18 @@ public class Scanner {
         }
         if (myRedPoint == -1 || myGreenPoint == -1) {
             System.err.println("Red or green point not found");
-            return 0;
+            return -1;
         }
         return (myRedPoint - myGreenPoint) / redSize;
     }
 
     public int ScanGreenPosition() {
         BufferedImage progress = robot.createScreenCapture(rectangle);
-        Color myGreen = new Color(0, 255, 6);
 
         for (int y = progress.getHeight() - 1; y >= 0; y--) {
             for (int x = 0; x < progress.getWidth(); x++) {
                 Color tmpColor = new Color(progress.getRGB(x, y));
-                if (tmpColor.equals(myGreen)) {
+                if (isColorClose(tmpColor, GREEN_ARROW_COLOR)) {
                     return x;
                 }
             }
@@ -66,4 +72,3 @@ public class Scanner {
         return -1;
     }
 }
-

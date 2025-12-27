@@ -17,12 +17,5 @@ public class GUIMock implements MainGUIInterface {
     }
 
     @Override
-    public void addRecipeChangedListener(RecipeChangedEventListener listener) {
-
-    }
-
-    @Override
-    public void removeRecipeChangedListener(RecipeChangedEventListener listener) {
-
-    }
+    public void addRecipeChangedListener(RecipeChangedEventListener listener) {}
 }

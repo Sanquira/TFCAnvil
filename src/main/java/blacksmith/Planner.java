@@ -1,80 +1,118 @@
 package blacksmith;
 
-import wrappers.ActionValuePoint;
-import wrappers.PlannerBacktrack;
-import wrappers.PlannerNode;
-
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import wrappers.ActionValuePoint;
 
 public class Planner {
 
     private final List<ActionValuePoint> actionValuePointList;
 
-    private final Map<Integer, PlannerBacktrack> cameFrom;
+    // Track path: position -> (action, previousPosition)
+    private final Map<Integer, PathStep> paths;
+
+    // Statistics for performance testing
+    private int iterationCount = 0;
+    private int positionsExplored = 0;
 
     public Planner(List<ActionValuePoint> actionValuePointList) {
         this.actionValuePointList = actionValuePointList;
-        cameFrom = new HashMap<>();
+        paths = new HashMap<>();
     }
 
-    public List<ActionValuePoint> plan(int target) {
+    public int getIterationCount() {
+        return iterationCount;
+    }
+
+    public int getPositionsExplored() {
+        return positionsExplored;
+    }
+
+    public List<ActionValuePoint> plan(int target, int maxValue) {
         if (target < 0) {
             return null;
         }
-        cameFrom.clear();
-        Map<Integer, PlannerNode> closedSet = new HashMap<>();
-        Map<Integer, PlannerNode> openSet = new HashMap<>();
-        openSet.put(0, new PlannerNode(null, 0, 0));
 
-        while (!openSet.isEmpty()) {
-            int x = getSmallestF(openSet);
-            if (x == target) {
-                return reconstructPath(target);
-            }
-            PlannerNode xData = openSet.remove(x);
-            closedSet.put(x, xData);
-
-            for (ActionValuePoint action : actionValuePointList) {
-                int n = x + action.actionValue().getValue();
-                if (closedSet.containsKey(n)) {
-                    continue;
-                }
-                int currGScore = xData.gValue() + action.actionValue().getValue();
-                if (currGScore < 0) {
-                    continue;
-                }
-                if (!openSet.containsKey(n) || currGScore < openSet.get(n).gValue()) {
-                    cameFrom.put(n, new PlannerBacktrack(action, x));
-                    openSet.put(n, new PlannerNode(action, currGScore, xData.fValue() + 1));
-                }
-            }
+        if (target == 0) {
+            iterationCount = 0;
+            positionsExplored = 1;
+            return new ArrayList<>();
         }
+
+        paths.clear();
+
+        Map<Integer, Integer> visited = new HashMap<>();
+        visited.put(0, 0);
+
+        List<Integer> currentLevel = new ArrayList<>();
+        currentLevel.add(0);
+
+        int maxSteps = Math.max(100, Math.abs(target) / 2);
+        iterationCount = 0;
+
+        for (int step = 0; step < maxSteps; step++) {
+            if (currentLevel.isEmpty()) {
+                break;
+            }
+
+            List<Integer> nextLevel = new ArrayList<>();
+
+            for (Integer position : currentLevel) {
+                int currentCumulative = visited.get(position);
+
+                for (ActionValuePoint action : actionValuePointList) {
+                    iterationCount++;
+
+                    int newPosition = position + action.action().value;
+                    int newCumulative = currentCumulative + action.action().value;
+
+                    if (newCumulative < 0 || newCumulative > maxValue) {
+                        continue;
+                    }
+
+                    if (!visited.containsKey(newPosition)) {
+                        visited.put(newPosition, newCumulative);
+                        paths.put(newPosition, new PathStep(action, position));
+
+                        if (newPosition == target) {
+                            positionsExplored = visited.size();
+                            return reconstructPath(target);
+                        }
+
+                        nextLevel.add(newPosition);
+                    }
+                }
+            }
+
+            currentLevel = nextLevel;
+        }
+
         System.err.println("Planner could not find solution");
+        positionsExplored = visited.size();
         return null;
     }
 
-    private int getSmallestF(Map<Integer, PlannerNode> openSet) {
-        int smallest = Integer.MAX_VALUE;
-        int smallestKey = 0;
-        for (Map.Entry<Integer, PlannerNode> entry : openSet.entrySet()) {
-            if (entry.getValue().fValue() < smallest) {
-                smallest = entry.getValue().fValue();
-                smallestKey = entry.getKey();
-            }
-        }
-        return smallestKey;
+    public List<ActionValuePoint> plan(int target) {
+        return this.plan(target, 150);
     }
 
-    private List<ActionValuePoint> reconstructPath(int currNode) {
-        if (cameFrom.containsKey(currNode)) {
-            List<ActionValuePoint> p = reconstructPath(cameFrom.get(currNode).cameFrom());
-            p.add(cameFrom.get(currNode).actionValuePoint());
-            return p;
-        } else {
-            return new ArrayList<>();
+    private List<ActionValuePoint> reconstructPath(int target) {
+        List<ActionValuePoint> result = new ArrayList<>();
+        int current = target;
+
+        while (paths.containsKey(current)) {
+            PathStep step = paths.get(current);
+            result.add(step.action);
+            current = step.previousPosition;
         }
+
+        // Reverse to get forward path
+        Collections.reverse(result);
+        return result;
     }
+
+    private record PathStep(ActionValuePoint action, int previousPosition) {}
 }
