@@ -43,12 +43,11 @@ public abstract class AbstractParser<T> {
     protected abstract Type getObjectType();
 
     public T parse() {
-        InputStream in = openInputStream(filePath);
-        if (in == null) {
-            return null;
-        }
-        JsonReader jsonReader = readJson(in);
-        try {
+        try (InputStream in = openInputStream(filePath)) {
+            if (in == null) {
+                return null;
+            }
+            JsonReader jsonReader = readJson(in);
             return g.fromJson(jsonReader, getObjectType());
         } catch (com.google.gson.JsonParseException e) {
             // Print the parser-provided message (e.g. Unknown finishing action...) and return null
