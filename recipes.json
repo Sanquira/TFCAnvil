@@ -1,0 +1,117 @@
+[
+  {
+    "name": "Hammer",
+    "finishingActions": [
+      "Shrink",
+      "Punch"
+    ]
+  },
+  {
+    "name": "Lantern",
+    "finishingActions": [
+      "Draw",
+      "Bend",
+      "Bend"
+    ]
+  },
+  {
+    "name": "Prospector Hammer (mod)",
+    "finishingActions": [
+      "Shrink",
+      "Draw",
+      "Punch"
+    ]
+  },
+  {
+    "name": "Prospector Pickaxe",
+    "finishingActions": [
+      "Bend",
+      "Draw",
+      "Punch"
+    ]
+  },
+  {
+    "name": "Saw",
+    "finishingActions": [
+      "Light Hit",
+      "Light Hit"
+    ]
+  },
+  {
+    "name": "Chisel",
+    "finishingActions": [
+      "Draw",
+      "Light Hit",
+      "Light Hit"
+    ]
+  },
+  {
+    "name": "Pickaxe",
+    "finishingActions": [
+      "Draw",
+      "Bend",
+      "Punch"
+    ]
+  },
+  {
+    "name": "Javelin",
+    "finishingActions": [
+      "Draw",
+      "Light Hit",
+      "Light Hit"
+    ]
+  },
+  {
+    "name": "Scytle",
+    "finishingActions": [
+      "Bend",
+      "Draw",
+      "Light Hit"
+    ]
+  },
+  {
+    "name": "Axe",
+    "finishingActions": [
+      "Upset",
+      "Light Hit",
+      "Punch"
+    ]
+  },
+  {
+    "name": "Knife",
+    "finishingActions": [
+      "Draw",
+      "Draw",
+      "Light Hit"
+    ]
+  },
+  {
+    "name": "Showel",
+    "finishingActions": [
+      "Light Hit",
+      "Punch"
+    ]
+  },
+  {
+    "name": "Hoe",
+    "finishingActions": [
+      "Bend",
+      "Hard Hit",
+      "Punch"
+    ]
+  },
+  {
+    "name": "Split",
+    "finishingActions": [
+      "Punch"
+    ]
+  },
+  {
+    "name": "Wrought Iron Ingot",
+    "finishingActions": [
+      "Light Hit",
+      "Light Hit",
+      "Light Hit"
+    ]
+  }
+]
