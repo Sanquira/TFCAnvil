@@ -2,6 +2,9 @@ package blacksmith;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 public class Scanner {
 
@@ -27,6 +30,11 @@ public class Scanner {
 
     public int ScanDistance() {
         BufferedImage progress = robot.createScreenCapture(rectangle);
+        try {
+            ImageIO.write(progress, "png", new File("scan_distance_capture.png"));
+        } catch (IOException e) {
+            System.err.println("Errors while saving image: " + e.getMessage());
+        }
 
         int y = redRow;
         int myRedPoint = -1;
