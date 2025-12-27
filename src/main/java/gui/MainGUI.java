@@ -5,6 +5,7 @@ import blacksmith.StateMachine;
 import java.awt.*;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -51,6 +52,16 @@ public class MainGUI extends JFrame implements MainGUIInterface {
         recipeListComboBox = new JComboBox<>();
         populateRecipeComboBox("");
 
+        // Use GridBagLayout for full-width dropdowns, but only recipeListComboBox now
+        JPanel recipePanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+        gbc.gridx = 0;
+        recipePanel.add(recipeListComboBox, gbc);
+        recipePanel.setPreferredSize(
+                new Dimension(searchPanel.getPreferredSize().width, recipeListComboBox.getPreferredSize().height));
+
         // Add search filter listener
         searchField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -80,12 +91,16 @@ public class MainGUI extends JFrame implements MainGUIInterface {
         // Layout components
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.add(searchPanel, BorderLayout.NORTH);
-        topPanel.add(recipeListComboBox, BorderLayout.SOUTH);
+        topPanel.add(recipePanel, BorderLayout.SOUTH);
 
-        add(topPanel, "North");
-        add(statusLabel, "Center");
-        add(guideLabel, "South");
-        setSize(250, 150);
+        // Add status and guide labels
+        JPanel statusPanel = new JPanel(new BorderLayout());
+        statusPanel.add(statusLabel, BorderLayout.CENTER);
+        statusPanel.add(guideLabel, BorderLayout.SOUTH);
+
+        add(topPanel, BorderLayout.NORTH);
+        add(statusPanel, BorderLayout.CENTER);
+        setSize(250, 180);
         setVisible(true);
 
         StateMachine.getInstance().addProgramStateListener(newState -> {
@@ -142,11 +157,6 @@ public class MainGUI extends JFrame implements MainGUIInterface {
     }
 
     @Override
-    public void removeRecipeChangedListener(RecipeChangedEventListener listener) {
-        this.recipeSelectionEventListener.remove(listener);
-    }
-
-    @Override
     public void setGuideLabel(GuideLabel guideLabel) {
         this.guideLabel.setText(guideLabel.getLabel());
     }
@@ -159,7 +169,7 @@ public class MainGUI extends JFrame implements MainGUIInterface {
     private Map<String, Recipe> loadRecipes() {
         try {
             parsers.RecipesParser parser = new parsers.RecipesParser(recipeFileName);
-            return parser.parse().stream().collect(Collectors.toMap(Recipe::name, recipe -> recipe));
+            return new TreeMap<>(parser.parse().stream().collect(Collectors.toMap(Recipe::name, recipe -> recipe)));
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(
                     this, "Error loading recipes.json: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

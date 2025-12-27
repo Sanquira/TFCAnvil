@@ -11,9 +11,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import wrappers.Recipe;
 
 public class RecipesParser extends AbstractParser<List<Recipe>> {

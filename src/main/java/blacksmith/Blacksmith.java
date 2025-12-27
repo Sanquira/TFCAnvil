@@ -81,6 +81,18 @@ public class Blacksmith implements ToggableListeners {
 
             int distance = scanner.ScanDistance();
             if (distance == 0) {
+                gui.setStatusLabel(StatusLabel.BLACKSMITHING_SUCCESS);
+                StateMachine.getInstance().setCurrentState(ProgramState.RECORDED);
+                return;
+            }
+            if (distance == -1) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Warning: Unable to detect distance. Please check the scanner area and try again.",
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE);
+                gui.setStatusLabel(StatusLabel.BLACKSMITHING_ERROR);
+                StateMachine.getInstance().setCurrentState(ProgramState.STARTED);
                 return;
             }
             int targetDist = distance + requestedRecipe.startValue();
