@@ -13,6 +13,8 @@ import listeners.MouseEventListener;
 import listeners.ToggableListeners;
 import wrappers.ActionValuePoint;
 
+record ActionGuiIndex(int idxX, int idxY) {}
+
 public class Recorder implements ToggableListeners {
 
     private final MainGUIInterface gui;
@@ -23,6 +25,17 @@ public class Recorder implements ToggableListeners {
     private MouseEventListener mouseListener = null;
     private Iterator<Actions> actionIterator;
     private Actions currentAction;
+
+    private final Actions[] scannedActions = {Actions.LIGHT_HIT, Actions.SHRINK};
+    private final Map<Actions, ActionGuiIndex> guiIndex = Map.of(
+            Actions.LIGHT_HIT, new ActionGuiIndex(0, 0),
+            Actions.MEDIUM_HIT, new ActionGuiIndex(1, 0),
+            Actions.HARD_HIT, new ActionGuiIndex(0, 1),
+            Actions.DRAW, new ActionGuiIndex(1, 1),
+            Actions.PUNCH, new ActionGuiIndex(2, 0),
+            Actions.BEND, new ActionGuiIndex(3, 1),
+            Actions.UPSET, new ActionGuiIndex(2, 0),
+            Actions.SHRINK, new ActionGuiIndex(3, 1));
 
     private Point leftTop, rightBottom;
 
@@ -105,6 +118,7 @@ public class Recorder implements ToggableListeners {
         gui.setStatusLabel(StatusLabel.NOT_RECORDING);
         gui.setGuideLabel(GuideLabel.createRecordGuide());
         if (currentAction == null && leftTop != null && rightBottom != null) {
+            FinalizeActions();
             StateMachine.getInstance().setCurrentState(ProgramState.RECORDED);
             gui.setStatusLabel(StatusLabel.RECORDED);
             gui.setGuideLabel(GuideLabel.createBlacksmithReadyLabel());
@@ -116,7 +130,7 @@ public class Recorder implements ToggableListeners {
 
     private void SelectNextAction() {
         if (actionIterator == null) {
-            actionIterator = Arrays.asList(Actions.values()).iterator();
+            actionIterator = Arrays.asList(scannedActions).iterator();
         }
         if (actionIterator.hasNext()) {
             currentAction = actionIterator.next();
@@ -133,6 +147,20 @@ public class Recorder implements ToggableListeners {
             return;
         }
         StopRecording();
+    }
+
+    private void FinalizeActions() {
+        ActionValuePoint first = actionValuePointMap.get(scannedActions[0].name);
+        ActionValuePoint last = actionValuePointMap.get(scannedActions[1].name);
+        int width = last.posX() - first.posX();
+        int height = last.posY() - first.posY();
+        double stepX = width / 3.;
+        for (Actions currentAction : Actions.values()) {
+            var index = guiIndex.get(currentAction);
+            int posX = Math.toIntExact(Math.round(index.idxX() * stepX) + first.posX());
+            int posY = index.idxY() * height + first.posY();
+            actionValuePointMap.put(currentAction.name, new ActionValuePoint(currentAction, posX, posY));
+        }
     }
 
     private void ClearData() {
