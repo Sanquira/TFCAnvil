@@ -80,7 +80,6 @@ public class Blacksmith implements ToggableListeners {
             gui.setGuideLabel(GuideLabel.createWaitLabel());
 
             int distance = scanner.ScanDistance();
-            System.out.println("Scanned distance: " + distance);
             if (distance == 0) {
                 gui.setStatusLabel(StatusLabel.BLACKSMITHING_SUCCESS);
                 StateMachine.getInstance().setCurrentState(ProgramState.RECORDED);
@@ -177,7 +176,6 @@ public class Blacksmith implements ToggableListeners {
         robot.mouseMove(point.posX(), point.posY());
 
         int currGreenPos = scanner.ScanGreenPosition();
-        System.out.println(lastGreenPos + ", " + currGreenPos);
         if (lastGreenPos != -1 && lastGreenPos != currGreenPos) {
             repeatClickTimer.stop();
             lastGreenPos = currGreenPos;
