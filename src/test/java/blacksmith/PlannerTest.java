@@ -35,6 +35,7 @@ public class PlannerTest {
 
         assertNotNull(result, "Should find a solution");
         assertEquals(1, result.size(), "Should use exactly 1 action");
+        assertEquals(Actions.SHRINK, result.get(0).action(), "Should use SHRINK action");
         assertEquals(16, result.get(0).action().value);
     }
 
@@ -50,6 +51,11 @@ public class PlannerTest {
 
         assertNotNull(result, "Should find a solution");
         assertEquals(3, result.size(), "Should use 3 actions");
+
+        // Verify specific order: UPSET, PUNCH, PUNCH
+        assertEquals(Actions.UPSET, result.get(0).action(), "First action should be UPSET");
+        assertEquals(Actions.PUNCH, result.get(1).action(), "Second action should be PUNCH");
+        assertEquals(Actions.PUNCH, result.get(2).action(), "Third action should be PUNCH");
 
         // Verify sum equals target
         int sum = result.stream().mapToInt(a -> a.action().value).sum();
@@ -71,6 +77,10 @@ public class PlannerTest {
 
         assertNotNull(result, "Should find a solution");
         assertEquals(2, result.size(), "Should prefer fewer steps: 2×13 instead of 13×2");
+
+        // Verify specific order: UPSET, UPSET
+        assertEquals(Actions.UPSET, result.get(0).action(), "First action should be UPSET");
+        assertEquals(Actions.UPSET, result.get(1).action(), "Second action should be UPSET");
 
         int sum = result.stream().mapToInt(a -> a.action().value).sum();
         assertEquals(26, sum);
@@ -123,6 +133,10 @@ public class PlannerTest {
         assertNotNull(result, "Should find solution with negative actions");
         assertEquals(2, result.size(), "Should use 2 actions");
 
+        // Verify specific order: SHRINK, LIGHT_HIT
+        assertEquals(Actions.SHRINK, result.get(0).action(), "First action should be SHRINK");
+        assertEquals(Actions.LIGHT_HIT, result.get(1).action(), "Second action should be LIGHT_HIT");
+
         int sum = result.stream().mapToInt(a -> a.action().value).sum();
         assertEquals(13, sum);
     }
@@ -148,6 +162,12 @@ public class PlannerTest {
         // The algorithm CAN find a valid path where gScore stays non-negative
         assertNotNull(result, "Should find solution: UPSET+UPSET+DRAW keeps gScore positive");
         assertEquals(3, result.size(), "Should use 3 actions");
+
+        // Verify specific order: UPSET, UPSET, DRAW
+        assertEquals(Actions.UPSET, result.get(0).action(), "First action should be UPSET");
+        assertEquals(Actions.UPSET, result.get(1).action(), "Second action should be UPSET");
+        assertEquals(Actions.DRAW, result.get(2).action(), "Third action should be DRAW");
+
         int sum = result.stream().mapToInt(a -> a.action().value).sum();
         assertEquals(11, sum);
     }
@@ -165,6 +185,10 @@ public class PlannerTest {
 
         assertNotNull(result, "Should find solution when gScore stays non-negative");
         assertEquals(2, result.size());
+
+        // Verify specific order: UPSET, LIGHT_HIT
+        assertEquals(Actions.UPSET, result.get(0).action(), "First action should be UPSET");
+        assertEquals(Actions.LIGHT_HIT, result.get(1).action(), "Second action should be LIGHT_HIT");
 
         int sum = result.stream().mapToInt(a -> a.action().value).sum();
         assertEquals(10, sum);
@@ -205,6 +229,10 @@ public class PlannerTest {
         assertNotNull(result, "Should find solution");
         assertEquals(2, result.size(), "Should prefer 2-step solution");
 
+        // Verify specific order: BEND, BEND
+        assertEquals(Actions.BEND, result.get(0).action(), "First action should be BEND");
+        assertEquals(Actions.BEND, result.get(1).action(), "Second action should be BEND");
+
         int sum = result.stream().mapToInt(a -> a.action().value).sum();
         assertEquals(14, sum);
     }
@@ -221,6 +249,7 @@ public class PlannerTest {
 
         assertNotNull(result, "Should find solution");
         assertEquals(1, result.size(), "Should find shortest path");
+        assertEquals(Actions.PUNCH, result.get(0).action(), "Should use PUNCH action");
         assertEquals(2, result.get(0).action().value);
     }
 
@@ -325,6 +354,10 @@ public class PlannerTest {
 
         assertNotNull(result);
         assertEquals(2, result.size(), "Should minimize steps (2) not cost");
+
+        // Verify specific order: BEND, BEND
+        assertEquals(Actions.BEND, result.get(0).action(), "First action should be BEND");
+        assertEquals(Actions.BEND, result.get(1).action(), "Second action should be BEND");
     }
 
     @Test
