@@ -80,6 +80,7 @@ public class Blacksmith implements ToggableListeners {
             gui.setGuideLabel(GuideLabel.createWaitLabel());
 
             int distance = scanner.ScanDistance();
+            System.out.println("Scanned distance: " + distance);
             if (distance == 0) {
                 gui.setStatusLabel(StatusLabel.BLACKSMITHING_SUCCESS);
                 StateMachine.getInstance().setCurrentState(ProgramState.RECORDED);
@@ -100,6 +101,16 @@ public class Blacksmith implements ToggableListeners {
                 return;
             }
             List<ActionValuePoint> plan = planner.plan(targetDist);
+            if (plan == null) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Error: Unable to create a plan for the requested recipe with the current tool positions.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                gui.setStatusLabel(StatusLabel.BLACKSMITHING_ERROR);
+                StateMachine.getInstance().setCurrentState(ProgramState.RECORDED);
+                return;
+            }
             for (Actions action : requestedRecipe.finishingActions()) {
                 plan.add(actionValuePointMap.get(action.name));
             }
