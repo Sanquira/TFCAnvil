@@ -100,6 +100,16 @@ public class Blacksmith implements ToggableListeners {
                 return;
             }
             List<ActionValuePoint> plan = planner.plan(targetDist);
+            if (plan == null) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Error: Unable to create a plan for the requested recipe with the current tool positions.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                gui.setStatusLabel(StatusLabel.BLACKSMITHING_ERROR);
+                StateMachine.getInstance().setCurrentState(ProgramState.RECORDED);
+                return;
+            }
             for (Actions action : requestedRecipe.finishingActions()) {
                 plan.add(actionValuePointMap.get(action.name));
             }
@@ -166,7 +176,6 @@ public class Blacksmith implements ToggableListeners {
         robot.mouseMove(point.posX(), point.posY());
 
         int currGreenPos = scanner.ScanGreenPosition();
-        System.out.println(lastGreenPos + ", " + currGreenPos);
         if (lastGreenPos != -1 && lastGreenPos != currGreenPos) {
             repeatClickTimer.stop();
             lastGreenPos = currGreenPos;
