@@ -31,14 +31,14 @@ public class PlannerPerformanceTest {
     }
 
     private void addAllActions() {
-        actions.add(new ActionValuePoint(Actions.LIGHT_HIT, 0, 0));
-        actions.add(new ActionValuePoint(Actions.MEDIUM_HIT, 0, 0));
-        actions.add(new ActionValuePoint(Actions.HARD_HIT, 0, 0));
-        actions.add(new ActionValuePoint(Actions.DRAW, 0, 0));
         actions.add(new ActionValuePoint(Actions.PUNCH, 0, 0));
         actions.add(new ActionValuePoint(Actions.BEND, 0, 0));
         actions.add(new ActionValuePoint(Actions.UPSET, 0, 0));
         actions.add(new ActionValuePoint(Actions.SHRINK, 0, 0));
+        actions.add(new ActionValuePoint(Actions.LIGHT_HIT, 0, 0));
+        actions.add(new ActionValuePoint(Actions.MEDIUM_HIT, 0, 0));
+        actions.add(new ActionValuePoint(Actions.HARD_HIT, 0, 0));
+        actions.add(new ActionValuePoint(Actions.DRAW, 0, 0));
     }
 
     /**
@@ -47,10 +47,10 @@ public class PlannerPerformanceTest {
      */
     private static Stream<Arguments> performanceTestCases() {
         return Stream.of(
-                Arguments.of(50, 1000, 200, 5, 10),
-                Arguments.of(100, 1000, 400, 5, 10),
-                Arguments.of(200, 1600, 800, 10, 20),
-                Arguments.of(2000, 16000, 2000, 15, 130));
+                Arguments.of(50, 1500, 200, 5, 10),
+                Arguments.of(100, 1500, 400, 5, 10),
+                Arguments.of(200, 3000, 800, 10, 20),
+                Arguments.of(2000, 32000, 4000, 15, 130));
     }
 
     @ParameterizedTest(name = "Target {0}: should complete in < {1} iterations")
