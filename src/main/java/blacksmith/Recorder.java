@@ -33,8 +33,8 @@ public class Recorder implements ToggableListeners {
             Actions.HARD_HIT, new ActionGuiIndex(0, 1),
             Actions.DRAW, new ActionGuiIndex(1, 1),
             Actions.PUNCH, new ActionGuiIndex(2, 0),
-            Actions.BEND, new ActionGuiIndex(3, 1),
-            Actions.UPSET, new ActionGuiIndex(2, 0),
+            Actions.BEND, new ActionGuiIndex(3, 0),
+            Actions.UPSET, new ActionGuiIndex(2, 1),
             Actions.SHRINK, new ActionGuiIndex(3, 1));
 
     private Point leftTop, rightBottom;
