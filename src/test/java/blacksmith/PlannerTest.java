@@ -87,13 +87,16 @@ public class PlannerTest {
     }
 
     @Test
-    void testNegativeTarget_ReturnsNull() {
+    void testNegativeTarget() {
         actions.add(new ActionValuePoint(Actions.PUNCH, 0, 0));
+        actions.add(new ActionValuePoint(Actions.HARD_HIT, 0, 0));
         Planner planner = new Planner(actions);
 
         List<ActionValuePoint> result = planner.plan(-5);
 
-        assertNull(result, "Should return null for negative target");
+        assertEquals(Actions.PUNCH, result.get(0).action(), "First action should be PUNCH");
+        assertEquals(Actions.PUNCH, result.get(1).action(), "Second action should be PUNCH");
+        assertEquals(Actions.HARD_HIT, result.get(2).action(), "Third action should be HARD_HIT");
     }
 
     @Test

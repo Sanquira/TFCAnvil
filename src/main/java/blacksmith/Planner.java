@@ -31,11 +31,7 @@ public class Planner {
         return positionsExplored;
     }
 
-    public List<ActionValuePoint> plan(int target, int maxValue) {
-        if (target < 0) {
-            return null;
-        }
-
+    public List<ActionValuePoint> plan(int target, int limitValue) {
         if (target == 0) {
             iterationCount = 0;
             positionsExplored = 1;
@@ -69,7 +65,7 @@ public class Planner {
                     int newPosition = position + action.action().value;
                     int newCumulative = currentCumulative + action.action().value;
 
-                    if (newCumulative < 0 || newCumulative > maxValue) {
+                    if (newCumulative < -limitValue || newCumulative > limitValue) {
                         continue;
                     }
 

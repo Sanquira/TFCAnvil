@@ -5,14 +5,14 @@ package blacksmith;
  * Each enum constant has a label (original name) and value.
  */
 public enum Actions {
-    LIGHT_HIT("Light Hit", -3),
-    MEDIUM_HIT("Medium Hit", -6),
-    HARD_HIT("Hard Hit", -9),
-    DRAW("Draw", -15),
     PUNCH("Punch", 2),
     BEND("Bend", 7),
     UPSET("Upset", 13),
-    SHRINK("Shrink", 16);
+    SHRINK("Shrink", 16),
+    LIGHT_HIT("Light Hit", -3),
+    MEDIUM_HIT("Medium Hit", -6),
+    HARD_HIT("Hard Hit", -9),
+    DRAW("Draw", -15);
 
     public final String name;
     public final int value;
