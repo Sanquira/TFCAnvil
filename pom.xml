@@ -6,7 +6,7 @@
 
     <groupId>sanquira.van.delbar</groupId>
     <artifactId>TFCAnvil</artifactId>
-    <version>1.3-SNAPSHOT</version>
+    <version>1.4-SNAPSHOT</version>
     <dependencies>
         <dependency>
             <groupId>com.google.code.gson</groupId>
